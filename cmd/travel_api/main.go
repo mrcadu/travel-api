@@ -2,10 +2,12 @@ package main
 
 import (
 	"travel-api/api/v1/router"
-	"travel-api/internal/model"
+	"travel-api/internal/model/datasource"
+	"travel-api/locale"
 )
 
 func main() {
-	model.ConnectDatabase()
-	router.CreateRouter()
+	datasource.Setup()
+	locale.Setup()
+	router.NewGin().CreateRouter()
 }
