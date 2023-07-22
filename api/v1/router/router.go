@@ -44,7 +44,7 @@ func (r GinImpl) CreateRouter() *gin.Engine {
 			countryRoutes.GET("/:id/markers", r.countryHandler.GetMarkers)
 		}
 	}
-	err := router.Run("localhost:" + config.GetProperty("SERVER_PORT"))
+	err := router.Run(":" + config.GetProperty("SERVER_PORT"))
 	if err != nil {
 		log.Fatal(err)
 	}
