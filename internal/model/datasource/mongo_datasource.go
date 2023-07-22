@@ -32,7 +32,9 @@ func (m MongoDatasourceImpl) Setup() {
 func (m MongoDatasourceImpl) SetupMongo() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	mongoClient, err := mongo.Connect(ctx, options.Client().ApplyURI(config.GetProperty("DB_URL")))
+	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
+	opts := options.Client().ApplyURI(config.GetProperty("DB_URL")).SetServerAPIOptions(serverAPI)
+	mongoClient, err := mongo.Connect(ctx, opts)
 	if err != nil {
 		panic(err)
 	}
