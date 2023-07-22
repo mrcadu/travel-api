@@ -12,6 +12,7 @@ import (
 type Country interface {
 	CRUD[model.Country]
 	GetMarkers(id string) ([]model.Marker, error)
+	GetAll() ([]model.Country, error)
 }
 
 type CountryMongo struct {
@@ -21,6 +22,19 @@ func (c CountryMongo) Get(id string) (model.Country, error) {
 	var country model.Country
 	err := c.getCollection().FindOne(context.TODO(), bson.D{{"_id", id}}).Decode(&country)
 	return country, err
+}
+
+func (c CountryMongo) GetAll() ([]model.Country, error) {
+	var countries []model.Country
+	result, err := c.getCollection().Find(context.TODO(), bson.D{{}})
+	if err != nil {
+		return nil, nil
+	}
+	err = result.All(context.TODO(), &countries)
+	if err != nil {
+		return nil, nil
+	}
+	return countries, err
 }
 
 func (c CountryMongo) Create(country model.Country) (model.Country, error) {

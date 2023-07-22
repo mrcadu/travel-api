@@ -9,6 +9,7 @@ import (
 
 type Country interface {
 	Get(ctx *gin.Context)
+	GetAll(ctx *gin.Context)
 	GetMarkers(ctx *gin.Context)
 	Update(ctx *gin.Context)
 	Delete(ctx *gin.Context)
@@ -35,6 +36,14 @@ func (c CountryImpl) Get(ctx *gin.Context) {
 		panic(err)
 	}
 	ctx.JSON(http.StatusOK, country)
+}
+
+func (c CountryImpl) GetAll(ctx *gin.Context) {
+	countries, err := c.countryRepository.GetAll()
+	if err != nil {
+		panic(err)
+	}
+	ctx.JSON(http.StatusOK, countries)
 }
 
 func (c CountryImpl) Update(ctx *gin.Context) {

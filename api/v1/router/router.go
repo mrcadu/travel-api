@@ -39,6 +39,7 @@ func (r GinImpl) CreateRouter() *gin.Engine {
 		{
 			countryRoutes.POST("", r.countryHandler.Create)
 			countryRoutes.GET("/:id", r.countryHandler.Get)
+			countryRoutes.GET("", r.countryHandler.GetAll)
 			countryRoutes.PUT("/:id", r.countryHandler.Update)
 			countryRoutes.DELETE("/:id", r.countryHandler.Delete)
 			countryRoutes.GET("/:id/markers", r.countryHandler.GetMarkers)
