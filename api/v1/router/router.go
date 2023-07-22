@@ -19,7 +19,8 @@ type Gin interface {
 }
 
 type GinImpl struct {
-	markersHandler handlers.Markers
+	markerHandler  handlers.Marker
+	countryHandler handlers.Country
 }
 
 func (r GinImpl) CreateRouter() *gin.Engine {
@@ -27,13 +28,20 @@ func (r GinImpl) CreateRouter() *gin.Engine {
 	router.Use(gin.CustomRecovery(r.ErrorHandler))
 	v1Routes := router.Group("/api/v1")
 	{
-		countryRoutes := v1Routes.Group("/country")
-		{
-			countryRoutes.POST("", r.markersHandler.Get)
-		}
 		markerRoutes := v1Routes.Group("/marker")
 		{
-			markerRoutes.POST("", r.markersHandler.Get)
+			markerRoutes.POST("", r.markerHandler.Create)
+			markerRoutes.GET("/:id", r.markerHandler.Get)
+			markerRoutes.PUT("/:id", r.markerHandler.Update)
+			markerRoutes.DELETE("/:id", r.markerHandler.Delete)
+		}
+		countryRoutes := v1Routes.Group("/country")
+		{
+			countryRoutes.POST("", r.countryHandler.Create)
+			countryRoutes.GET("/:id", r.countryHandler.Get)
+			countryRoutes.PUT("/:id", r.countryHandler.Update)
+			countryRoutes.DELETE("/:id", r.countryHandler.Delete)
+			countryRoutes.GET("/:id/markers", r.countryHandler.GetMarkers)
 		}
 	}
 	err := router.Run("localhost:" + config.GetProperty("SERVER_PORT"))
@@ -89,6 +97,7 @@ func (r GinImpl) ErrorHandler(c *gin.Context, err any) {
 }
 func NewGin() GinImpl {
 	return GinImpl{
-		markersHandler: handlers.NewMarkers(),
+		markerHandler:  handlers.NewMarker(),
+		countryHandler: handlers.NewCountry(),
 	}
 }

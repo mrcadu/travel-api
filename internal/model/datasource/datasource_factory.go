@@ -17,7 +17,7 @@ const (
 var mongoDatasource MongoDatasourceImpl
 
 var Get = func() Datasource {
-	var driver = Driver(config.GetProperty("Mongo"))
+	var driver = Driver(config.GetProperty("DRIVER"))
 	switch driver {
 	case Mongo:
 		return mongoDatasource
